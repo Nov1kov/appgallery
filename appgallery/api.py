@@ -184,7 +184,7 @@ class Client():
         otherwise contains info about specified language.
         
         Every of classes said has a `.JSON()` method to represent all it's data in JSON format.'''
-        url = Client.API_URL + 'publish/v2/app-info'
+        url = Client.API_URL + '/publish/v2/app-info'
         data = {
             'appId': app.id
         }
@@ -224,7 +224,7 @@ class Client():
             client.update_app_info(app=my_app_instance, info=app_info)
             
         Look utils.py for full list of AppInfo fields.'''
-        url = Client.API_URL + 'publish/v2/app-info'
+        url = Client.API_URL + '/publish/v2/app-info'
         data = {
             'appId': app.id,
             'appInfo': info.JSON()
@@ -263,7 +263,7 @@ class Client():
         `app_name`, `app_description`, `brief_info`, `new_features`.
             
         Look `utils.py` for full list of `LangInfo` fields.'''
-        url = Client.API_URL + 'publish/v2/app-language-info?appId=' + app.id
+        url = Client.API_URL + '/publish/v2/app-language-info?appId=' + app.id
         body = {
             'lang': lang.language
         }
@@ -297,7 +297,7 @@ class Client():
         '''Use this method to delete specified language off the app.
         
         `lang` can be `str` or `LangInfo` instance (`language` field will be used)'''
-        url = Client.API_URL + 'publish/v2/app-language-info'
+        url = Client.API_URL + '/publish/v2/app-language-info'
         data = {
             'appId': app.id,
             'lang': lang if isinstance(lang, str) else lang.lang
@@ -333,7 +333,7 @@ class Client():
             file_info = my_upload.upload_file('test.apk')
             
         Be sure you store the FileInfo instance as it's needed for updating the app.'''
-        url = Client.API_URL + 'publish/v2/upload-url'
+        url = Client.API_URL + '/publish/v2/upload-url'
         data = {
             'appId': app.id,
             'suffix': extension
@@ -344,7 +344,7 @@ class Client():
         }
         if self.token.is_expired():
             self.obtain_token()
-        self.last_response = requests.delete(url, data=data, headers=headers)
+        self.last_response = requests.get(url, params=data, headers=headers)
         if self.last_response.status_code == 200:
             response_parsed = json.loads(self.last_response.text)
             message = Message(response_parsed)
@@ -397,7 +397,7 @@ class Client():
         '''Use this method to submit your app for release.
         
         As you do this, your app will be reviewed by AppGallery for release.'''
-        url = Client.API_URL + 'publish/v2/app-submit'
+        url = Client.API_URL + '/publish/v2/app-submit'
         data = {
             'appId': app.id,
             'releaseType': release_type
